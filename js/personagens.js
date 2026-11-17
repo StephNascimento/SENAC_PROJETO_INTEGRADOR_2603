@@ -21,14 +21,15 @@ const Personagens = {
     }
     return null;
   },
-  salvar(dados) {
+    salvar(dados) {
     const erro = this.validar(dados);
     if (erro) return { erro };
+    dados.nome = dados.nome.trim();
     const lista = this.todos();
     if (dados.id) {
       const i = lista.findIndex(p => p.id === dados.id);
       if (i < 0) return { erro: 'Personagem não encontrado.' };
-      lista[i] = { ...lista[i], ...dados };
+      lista[i] = { ...lista[i], ...dados, atualizadoEm: new Date().toISOString() };
     } else {
       if (lista.length >= this.LIMITE) return { erro: `Limite de ${this.LIMITE} personagens atingido. Exclua um para cadastrar outro.` };
       dados.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
