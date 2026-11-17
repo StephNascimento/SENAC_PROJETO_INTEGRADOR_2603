@@ -17,7 +17,12 @@ function irLista() {
 }
 
 function renderLista() {
-  const itens = Personagens.listar({ busca: $('#busca').value, status: $('#f-status').value, relacao: $('#f-relacao').value });
+  const itens = Personagens.listar({
+    personagem: $('#busca-personagem').value,
+    classe: $('#f-classe').value,
+    status: $('#f-status').value,
+    relacao: $('#f-relacao').value
+  });
   $('#lista').innerHTML = itens.length ? itens.map(p => `
     <li class="linha" data-id="${esc(p.id)}">
       <button class="link nome" data-acao="ver">${esc(p.nome)}</button>
@@ -32,7 +37,8 @@ function renderLista() {
     : '<li class="vazio">Nenhum personagem encontrado. Use "Novo Personagem" para cadastrar o primeiro.</li>';
 }
 
-['#busca', '#f-status', '#f-relacao'].forEach(s => $(s).addEventListener('input', renderLista));
+['#busca-personagem', '#f-status', '#f-relacao'].forEach(s => $(s).addEventListener('input', renderLista));
+$('#f-classe').addEventListener('change', renderLista);
 
 /* ---------- Detalhe ---------- */
 function abrirDetalhe(id) {
@@ -84,6 +90,9 @@ function montarCartoes() {
         <strong>${esc(o.nome)}</strong><small>${esc(o.info)}</small>
       </button>`).join('');
   });
+  $('#f-classe').insertAdjacentHTML('beforeend', Dados.classes.map(o =>
+    `<option value="${esc(o.nome)}">${esc(o.nome)}</option>`
+  ).join(''));
 }
 
 function marcarEscolhas() {

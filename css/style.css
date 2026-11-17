@@ -15,8 +15,8 @@ input,select,textarea{font:inherit;padding:.6rem;border:1px solid #c9c9b0;backgr
 label{display:block;color:var(--verde);font-weight:700;margin:.8rem 0 .3rem;text-align:left}
 :focus-visible{outline:3px solid var(--cobre);outline-offset:2px}
 .erro{color:#9b2c1d;min-height:1.4em;margin:.6rem 0}
-.barra{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap}
-.barra input{flex:2 1 200px}.barra select{flex:1 1 140px}
+.barra{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.5rem;margin-bottom:.7rem}
+.barra input,.barra select{padding:.5rem .6rem}
 #lista{list-style:none;margin:0;padding:0}
 .linha{display:grid;grid-template-columns:1.2fr 2fr .7fr .8fr auto;gap:1rem;align-items:center;padding:1rem .5rem;border-bottom:3px solid var(--verde)}
 .linha .nome{font-weight:700;text-align:left;font-size:1rem}
@@ -34,6 +34,7 @@ label{display:block;color:var(--verde);font-weight:700;margin:.8rem 0 .3rem;text
 .desc{white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:700px){
   .cartao{padding:1.5rem;border-radius:2.5rem 2.5rem 0 0}
+  .barra{grid-template-columns:1fr}
   .linha{grid-template-columns:1fr auto}
   .linha .desc,.linha .st,.linha .rel{grid-column:1/-1}
   .grade{grid-template-columns:1fr}
