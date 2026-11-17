@@ -97,8 +97,7 @@ function marcarEscolhas() {
 function mostrarEtapa(n) {
   etapa = n;
   document.querySelectorAll('.etapa').forEach(e => { e.hidden = Number(e.dataset.etapa) !== n; });
-  $('#etapas').innerHTML = NOMES_ETAPAS.map((nome, i) => `<li class="${i === n ? 'atual' : i < n ? 'feita' : ''}">${i + 1}. ${nome}</li>`).join('');
-  $('[data-acao="anterior"]').textContent = n === 0 ? 'Cancelar' : 'Anterior';
+  $('#etapas').innerHTML = NOMES_ETAPAS.map((nome, i) => `<li data-etapa="${i}" style="cursor:pointer" class="${i === n ? 'atual' : i < n ? 'feita' : ''}">${i + 1}. ${nome}</li>`).join('');  $('[data-acao="anterior"]').textContent = n === 0 ? 'Cancelar' : 'Anterior';
   $('[data-acao="proximo"]').hidden = n === 3;
   $('#btn-salvar').hidden = n !== 3;
   $('#erro-form').textContent = '';
@@ -113,6 +112,17 @@ function anterior() {
   if (etapa === 0) irLista(); else mostrarEtapa(etapa - 1);
 }
 
+$('#etapas').addEventListener('click', e => {
+  const li = e.target.closest('li[data-etapa]');
+  if (!li) return;
+  const destino = Number(li.dataset.etapa);
+  if (destino > etapa && CAMPOS.slice(0, destino).some(c => !escolha[c])) {
+    $('#erro-form').textContent = 'Escolha uma opção para continuar.';
+    return;
+  }
+  mostrarEtapa(destino);
+});
+
 $('#tela-form').addEventListener('click', e => {
   const b = e.target.closest('.cartao-opcao');
   if (!b) return;
@@ -123,6 +133,7 @@ $('#tela-form').addEventListener('click', e => {
 
 function abrirForm(id) {
   const p = id ? Personagens.buscar(id) : null;
+  if (id && !p) return irLista();
   if (!p && Personagens.cheio()) {
     irLista();
     $('#aviso').textContent = `Limite de ${Personagens.LIMITE} personagens atingido. Exclua um para cadastrar outro.`;
