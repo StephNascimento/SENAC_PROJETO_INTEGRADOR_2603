@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Diário de Aventura</title>
+<!-- fontes do google para titulos estilo rpg e textos -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -38,7 +42,7 @@
   </section>
 
   <section id="tela-form" class="cartao" hidden>
-    <h2 id="titulo-form">Novo personagem</h2>
+    <h2 id="titulo-form">Novo Personagem</h2>
     <ol class="etapas" id="etapas"></ol>
     <form id="form-personagem" novalidate>
       <input type="hidden" name="id">
@@ -77,6 +81,16 @@
     </form>
   </section>
 </main>
+
+<!-- caixa de dialogo para confirmar antes de apagar -->
+<dialog id="caixa-confirmar" class="caixa-dialogo">
+  <h3>Confirmar exclusão</h3>
+  <p id="texto-confirmar"></p>
+  <div class="acoes">
+    <button class="btn" type="button" id="btn-nao">Cancelar</button>
+    <button class="btn" type="button" id="btn-sim">Excluir</button>
+  </div>
+</dialog>
 
 <script src="js/storage.js"></script>
 <script src="js/dados.js"></script>
