@@ -3,6 +3,8 @@ const $ = seletor => document.querySelector(seletor);
 const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const TELAS = ['lista', 'detalhe', 'form'];
 let fotoAtual = '';
+// guarda o id do personagem antes de apagar
+let idParaExcluir = null;
 
 function mostrar(nome) {
   TELAS.forEach(t => { $('#tela-' + t).hidden = t !== nome; });
@@ -34,7 +36,7 @@ function renderLista() {
         <button class="icone" data-acao="excluir" aria-label="Excluir ${esc(p.nome)}" title="Excluir">&#10005;</button>
       </span>
     </li>`).join('')
-    : '<li class="vazio">Nenhum personagem encontrado. Use "Novo Personagem" para cadastrar o primeiro.</li>';
+    : '<li class="vazio">Nenhum personagem encontrado. Use "Criar Novo Personagem" para cadastrar o primeiro.</li>';
 }
 
 ['#busca-personagem', '#f-status', '#f-relacao'].forEach(s => $(s).addEventListener('input', renderLista));
@@ -53,7 +55,7 @@ function abrirDetalhe(id) {
         <button class="icone" data-acao="excluir" aria-label="Excluir" title="Excluir">&#10005;</button>
       </span>
     </div>
-    <div class="grade" style="margin-top:1.5rem">
+    <div class="grade">
       <div class="foto">${p.foto ? `<img src="${esc(p.foto)}" alt="Foto de ${esc(p.nome)}">` : '<span>Sem foto</span>'}</div>
       <div>
         <strong class="rotulo">Descrição</strong><p class="desc">${esc(p.descricao) || '—'}</p>
@@ -106,7 +108,8 @@ function marcarEscolhas() {
 function mostrarEtapa(n) {
   etapa = n;
   document.querySelectorAll('.etapa').forEach(e => { e.hidden = Number(e.dataset.etapa) !== n; });
-  $('#etapas').innerHTML = NOMES_ETAPAS.map((nome, i) => `<li data-etapa="${i}" style="cursor:pointer" class="${i === n ? 'atual' : i < n ? 'feita' : ''}">${i + 1}. ${nome}</li>`).join('');  $('[data-acao="anterior"]').textContent = n === 0 ? 'Cancelar' : 'Anterior';
+  $('#etapas').innerHTML = NOMES_ETAPAS.map((nome, i) => `<li data-etapa="${i}" class="${i === n ? 'atual' : i < n ? 'feita' : ''}">${i + 1}. ${nome}</li>`).join('');
+  $('[data-acao="anterior"]').textContent = n === 0 ? 'Cancelar' : 'Anterior';
   $('[data-acao="proximo"]').hidden = n === 3;
   $('#btn-salvar').hidden = n !== 3;
   $('#erro-form').textContent = '';
@@ -155,7 +158,7 @@ function abrirForm(id) {
   escolha = p ? { classe: p.classe, especie: p.especie ?? p.raca, antecedente: p.antecedente } : {};
   marcarEscolhas();
   mostrarFoto(p ? p.foto : '');
-  $('#titulo-form').textContent = p ? 'Alterar personagem' : 'Novo personagem';
+  $('#titulo-form').textContent = p ? 'Alterar Personagem' : 'Novo Personagem';
   mostrar('form');
   mostrarEtapa(0);
 }
@@ -198,11 +201,26 @@ $('#form-personagem').addEventListener('submit', e => {
 /* ---------- Ações e navegação ---------- */
 function excluir(id) {
   const p = Personagens.buscar(id);
-  if (p && confirm(`Excluir "${p.nome}"? Essa ação não pode ser desfeita.`)) {
-    Personagens.excluir(id);
+  if (!p) return;
+  idParaExcluir = id;
+  $('#texto-confirmar').textContent = `Excluir "${p.nome}"? Essa ação não pode ser desfeita.`;
+  $('#caixa-confirmar').showModal();
+}
+
+// eventos dos botoes da caixa de dialogo
+$('#btn-nao').addEventListener('click', () => {
+  idParaExcluir = null;
+  $('#caixa-confirmar').close();
+});
+
+$('#btn-sim').addEventListener('click', () => {
+  if (idParaExcluir) {
+    Personagens.excluir(idParaExcluir);
+    idParaExcluir = null;
+    $('#caixa-confirmar').close();
     irLista();
   }
-}
+});
 
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-acao]');
