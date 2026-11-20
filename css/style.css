@@ -86,7 +86,7 @@ input,select,textarea{
 label{display:block;color:var(--verde);font-weight:700;font-size:1rem;margin:.8rem 0 .3rem;text-align:left}
 :focus-visible{outline:3px solid var(--cobre);outline-offset:2px}
 .erro{color:#9b2c1d;font-size:.95rem;font-weight:600;min-height:1.4em;margin:.6rem 0}
-.barra{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.barra{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:.6rem;margin-bottom:.7rem}
 .barra input,.barra select{padding:.55rem .6rem}
 #lista{list-style:none;margin:0;padding:0}
 .linha{display:grid;grid-template-columns:1.2fr 2fr .7fr .8fr auto;gap:1rem;align-items:center;padding:1rem .5rem;border-bottom:3px solid var(--verde);font-size:.95rem}
@@ -153,3 +153,45 @@ fieldset.etapa{border:0;padding:0;margin:0}
 .cartao-opcao:hover{border-color:var(--areia)}
 .cartao-opcao.ativo{border-color:var(--escuro);background:#fdf0d8;box-shadow:3px 3px 0 var(--cobre)}
 #form-personagem .acoes{justify-content:space-between}
+
+/* filtros rapidos de relacao e rodape da filtragem */
+.filtros-relacao{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem}
+.filtro-chip{
+  font-family:'Pixelify Sans',sans-serif;
+  font-size:.95rem;
+  font-weight:700;
+  background:#fff;
+  color:var(--escuro);
+  border:2px solid var(--verde);
+  border-radius:6px;
+  padding:.4rem .9rem;
+  cursor:pointer;
+  box-shadow:2px 2px 0 #d5d5b8;
+}
+.filtro-chip:hover{border-color:var(--areia)}
+.filtro-chip:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--escuro)}
+.filtro-chip.ativo{
+  background:var(--cobre);
+  color:#fff;
+  border-color:var(--escuro);
+  box-shadow:2px 2px 0 var(--escuro);
+}
+.filtros-rodape{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:1.6rem;
+  margin-bottom:.6rem;
+  font-size:.9rem;
+  color:var(--verde);
+}
+.limpar-filtros{font-size:.95rem;color:var(--cobre);text-decoration:underline}
+.limpar-filtros:hover{color:var(--escuro)}
+
+@media(max-width:900px){
+  .barra{grid-template-columns:1fr 1fr}
+  .barra input{grid-column:1/-1}
+}
+@media(max-width:700px){
+  .barra{grid-template-columns:1fr}
+}

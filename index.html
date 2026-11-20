@@ -19,21 +19,43 @@
 </header>
 
 <main>
-  <section id="tela-lista" class="cartao" hidden>
+<section id="tela-lista" class="cartao" hidden>
     <h2>Lista de Personagens</h2>
     <p class="erro" id="aviso" role="alert"></p>
+
+    <div class="filtros-relacao" id="f-relacao" role="group" aria-label="Filtrar por relação">
+      <button type="button" class="filtro-chip ativo" data-relacao="" aria-pressed="true">Todos</button>
+      <button type="button" class="filtro-chip" data-relacao="Aliado" aria-pressed="false">Aliado</button>
+      <button type="button" class="filtro-chip" data-relacao="Inimigo" aria-pressed="false">Inimigo</button>
+      <button type="button" class="filtro-chip" data-relacao="Neutro" aria-pressed="false">Neutro</button>
+      <button type="button" class="filtro-chip" data-relacao="Duvidosa" aria-pressed="false">Duvidosa</button>
+    </div>
+
     <div class="barra">
-      <input id="busca-personagem" type="search" placeholder="Pesquisar personagem" aria-label="Pesquisar personagem">
+      <input id="busca-personagem" type="search" placeholder="Pesquisar por nome ou descrição" aria-label="Pesquisar personagem">
       <select id="f-classe" aria-label="Filtrar por classe">
         <option value="">Classe: todas</option>
       </select>
-      <select id="f-status" aria-label="Filtrar por status">
-        <option value="">Status: todos</option><option>Vivo</option><option>Morto</option>
+      <select id="f-especie" aria-label="Filtrar por espécie">
+        <option value="">Espécie: todas</option>
       </select>
-      <select id="f-relacao" aria-label="Filtrar por relação">
-        <option value="">Relação: todas</option><option>Aliado</option><option>Inimigo</option><option>Neutro</option><option>Duvidosa</option>
+      <select id="f-status" aria-label="Filtrar por status">
+        <option value="">Status: todos</option>
+        <option>Vivo</option>
+        <option>Morto</option>
+      </select>
+      <select id="f-ordem" aria-label="Ordenar personagens">
+        <option value="nome-asc">Ordem: A–Z</option>
+        <option value="nome-desc">Ordem: Z–A</option>
+        <option value="recentes">Mais recentes</option>
       </select>
     </div>
+
+    <div class="filtros-rodape">
+      <span id="contador-lista" class="contador" aria-live="polite"></span>
+      <button type="button" id="btn-limpar-filtros" class="link limpar-filtros" hidden>Limpar filtros</button>
+    </div>
+
     <ul id="lista"></ul>
   </section>
 
@@ -94,6 +116,7 @@
 
 <script src="js/storage.js"></script>
 <script src="js/dados.js"></script>
+<script src="js/filtros.js"></script>
 <script src="js/personagens.js"></script>
 <script src="js/ui.js"></script>
 </body>

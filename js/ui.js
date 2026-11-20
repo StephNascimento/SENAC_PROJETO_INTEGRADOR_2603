@@ -12,6 +12,34 @@ function mostrar(nome) {
 }
 
 /* ---------- Lista ---------- */
+let relacaoFiltro = '';
+
+function obterFiltros() {
+  return {
+    termo: $('#busca-personagem').value,
+    classe: $('#f-classe').value,
+    especie: $('#f-especie').value,
+    status: $('#f-status').value,
+    relacao: relacaoFiltro,
+    ordem: $('#f-ordem').value
+  };
+}
+
+function limparFiltros() {
+  $('#busca-personagem').value = '';
+  $('#f-classe').value = '';
+  $('#f-especie').value = '';
+  $('#f-status').value = '';
+  $('#f-ordem').value = 'nome-asc';
+  relacaoFiltro = '';
+  document.querySelectorAll('#f-relacao .filtro-chip').forEach(btn => {
+    const ativo = btn.dataset.relacao === '';
+    btn.classList.toggle('ativo', ativo);
+    btn.setAttribute('aria-pressed', ativo);
+  });
+  renderLista();
+}
+
 function irLista() {
   $('#aviso').textContent = '';
   mostrar('lista');
@@ -19,12 +47,22 @@ function irLista() {
 }
 
 function renderLista() {
-  const itens = Personagens.listar({
-    personagem: $('#busca-personagem').value,
-    classe: $('#f-classe').value,
-    status: $('#f-status').value,
-    relacao: $('#f-relacao').value
-  });
+  const filtros = obterFiltros();
+  const total = Personagens.todos().length;
+  const itens = Personagens.listar(filtros);
+  const filtrado = Filtros.temAtivo(filtros);
+
+  $('#btn-limpar-filtros').hidden = !filtrado;
+  $('#contador-lista').textContent = total === 0
+    ? ''
+    : filtrado
+      ? `Mostrando ${itens.length} de ${total} ${total === 1 ? 'personagem' : 'personagens'}`
+      : `${total} ${total === 1 ? 'personagem cadastrado' : 'personagens cadastrados'}`;
+
+  const msgVazio = total === 0
+    ? 'Nenhum personagem encontrado. Use "Criar Novo Personagem" para cadastrar o primeiro.'
+    : 'Nenhum personagem corresponde aos filtros aplicados.';
+
   $('#lista').innerHTML = itens.length ? itens.map(p => `
     <li class="linha" data-id="${esc(p.id)}">
       <button class="link nome" data-acao="ver">${esc(p.nome)}</button>
@@ -36,11 +74,25 @@ function renderLista() {
         <button class="icone" data-acao="excluir" aria-label="Excluir ${esc(p.nome)}" title="Excluir">&#10005;</button>
       </span>
     </li>`).join('')
-    : '<li class="vazio">Nenhum personagem encontrado. Use "Criar Novo Personagem" para cadastrar o primeiro.</li>';
+    : `<li class="vazio">${msgVazio}</li>`;
 }
 
-['#busca-personagem', '#f-status', '#f-relacao'].forEach(s => $(s).addEventListener('input', renderLista));
-$('#f-classe').addEventListener('change', renderLista);
+$('#busca-personagem').addEventListener('input', renderLista);
+['#f-classe', '#f-especie', '#f-status', '#f-ordem'].forEach(s => $(s).addEventListener('change', renderLista));
+
+$('#f-relacao').addEventListener('click', e => {
+  const btn = e.target.closest('.filtro-chip');
+  if (!btn) return;
+  relacaoFiltro = btn.dataset.relacao;
+  document.querySelectorAll('#f-relacao .filtro-chip').forEach(b => {
+    const ativo = b === btn;
+    b.classList.toggle('ativo', ativo);
+    b.setAttribute('aria-pressed', ativo);
+  });
+  renderLista();
+});
+
+$('#btn-limpar-filtros').addEventListener('click', limparFiltros);
 
 /* ---------- Detalhe ---------- */
 function abrirDetalhe(id) {
@@ -93,6 +145,9 @@ function montarCartoes() {
       </button>`).join('');
   });
   $('#f-classe').insertAdjacentHTML('beforeend', Dados.classes.map(o =>
+    `<option value="${esc(o.nome)}">${esc(o.nome)}</option>`
+  ).join(''));
+  $('#f-especie').insertAdjacentHTML('beforeend', Dados.especies.map(o =>
     `<option value="${esc(o.nome)}">${esc(o.nome)}</option>`
   ).join(''));
 }
