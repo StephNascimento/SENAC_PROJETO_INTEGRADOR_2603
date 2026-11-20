@@ -1,4 +1,3 @@
-// Regras de negócio dos personagens (CRUD, pesquisa e filtro).
 const Personagens = {
   LIMITE: 20,
   cheio() {
@@ -21,7 +20,7 @@ const Personagens = {
     }
     return null;
   },
-    salvar(dados) {
+  salvar(dados) {
     const erro = this.validar(dados);
     if (erro) return { erro };
     dados.nome = dados.nome.trim();
@@ -43,15 +42,7 @@ const Personagens = {
   excluir(id) {
     return Armazenamento.gravar(this.chave(), this.todos().filter(p => p.id !== id));
   },
-  listar({ personagem = '', classe = '', status = '', relacao = '' } = {}) {
-    const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-    const termoPersonagem = norm(personagem.trim());
-    const termoClasse = norm(classe.trim());
-    return this.todos()
-      .filter(p => norm(p.nome ?? '').includes(termoPersonagem))
-      .filter(p => norm(p.classe ?? '').includes(termoClasse))
-      .filter(p => !status || p.status === status)
-      .filter(p => !relacao || p.relacao === relacao)
-      .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+  listar(criterios = {}) {
+    return Filtros.aplicar(this.todos(), criterios);
   }
 };
