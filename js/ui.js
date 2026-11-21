@@ -65,13 +65,24 @@ function renderLista() {
 
   $('#lista').innerHTML = itens.length ? itens.map(p => `
     <li class="linha" data-id="${esc(p.id)}">
-      <button class="link nome" data-acao="ver">${esc(p.nome)}</button>
-      <span class="desc">${esc([p.classe, p.especie ?? p.raca].filter(Boolean).join(' · '))}</span>
-      <span class="st">${esc(p.status)}</span>
-      <span class="rel">${esc(p.relacao)}</span>
+      <div class="card-thumb" data-acao="ver">
+        ${p.foto ? `<img src="${esc(p.foto)}" alt="Foto de ${esc(p.nome)}">` : '<span>Sem foto</span>'}
+      </div>
+      <div class="card-corpo">
+        <button class="link nome" data-acao="ver">${esc(p.nome)}</button>
+        <div class="card-meta">
+          <span class="desc">${esc([p.classe, p.especie ?? p.raca].filter(Boolean).join(' - '))}</span>
+          <span class="st">${esc(p.status)}</span>
+          <span class="rel">${esc(p.relacao)}</span>
+        </div>
+      </div>
       <span class="botoes">
-        <button class="icone" data-acao="editar" aria-label="Alterar ${esc(p.nome)}" title="Alterar">&#9998;</button>
-        <button class="icone" data-acao="excluir" aria-label="Excluir ${esc(p.nome)}" title="Excluir">&#10005;</button>
+        <button class="icone" data-acao="editar" aria-label="Alterar ${esc(p.nome)}" title="Alterar">
+          <img src="img/btn_editar.png" alt="Alterar">
+        </button>
+        <button class="icone" data-acao="excluir" aria-label="Excluir ${esc(p.nome)}" title="Excluir">
+          <img src="img/btn_delete.png" alt="Excluir">
+        </button>
       </span>
     </li>`).join('')
     : `<li class="vazio">${msgVazio}</li>`;
@@ -100,26 +111,32 @@ function abrirDetalhe(id) {
   if (!p) return irLista();
   $('#detalhe-conteudo').dataset.id = p.id;
   $('#detalhe-conteudo').innerHTML = `
-    <div class="detalhe-topo">
-      <h2>${esc(p.nome)}</h2>
-      <span class="botoes">
-        <button class="icone" data-acao="editar" aria-label="Alterar" title="Alterar">&#9998;</button>
-        <button class="icone" data-acao="excluir" aria-label="Excluir" title="Excluir">&#10005;</button>
-      </span>
-    </div>
-    <div class="grade">
+    <div class="ficha-topo">
       <div class="foto">${p.foto ? `<img src="${esc(p.foto)}" alt="Foto de ${esc(p.nome)}">` : '<span>Sem foto</span>'}</div>
-      <div>
-        <strong class="rotulo">Descrição</strong><p class="desc">${esc(p.descricao) || '—'}</p>
+      <div class="ficha-info">
+        <div class="detalhe-topo">
+          <h2>${esc(p.nome)}</h2>
+          <span class="botoes">
+            <button class="icone" data-acao="editar" aria-label="Alterar" title="Alterar">
+              <img src="img/btn_editar.png" alt="Alterar">
+            </button>
+            <button class="icone" data-acao="excluir" aria-label="Excluir" title="Excluir">
+              <img src="img/btn_delete.png" alt="Excluir">
+            </button>
+          </span>
+        </div>
         <div class="dados">
+          <div><strong>Classe - Raça</strong>${esc([p.classe, p.especie ?? p.raca].filter(Boolean).join(' - ')) || '—'}</div>
           <div><strong>Status</strong>${esc(p.status)}</div>
-          <div><strong>Classe</strong>${esc(p.classe) || '—'}</div>
-          <div><strong>Espécie</strong>${esc(p.especie ?? p.raca) || '—'}</div>
+          <div><strong>Relação</strong>${esc(p.relacao)}</div>
           <div><strong>Antecedente</strong>${esc(p.antecedente) || '—'}</div>
           <div><strong>Idade</strong>${p.idade !== '' ? esc(p.idade) + ' anos' : '—'}</div>
-          <div><strong>Relação</strong>${esc(p.relacao)}</div>
         </div>
       </div>
+    </div>
+    <div class="ficha-descricao">
+      <strong class="rotulo">Descrição</strong>
+      <p class="desc">${esc(p.descricao) || '—'}</p>
     </div>
     <div class="acoes"><button class="btn" data-acao="voltar">Voltar à lista</button></div>`;
   mostrar('detalhe');
