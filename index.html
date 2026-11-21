@@ -1,123 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Diário de Aventura</title>
-<!-- fontes do google para titulos estilo rpg e textos -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diário de Aventura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<header id="topo">
-  <h1>DIÁRIO DE AVENTURA</h1>
-  <nav>
-    <button class="link" data-acao="novo">Criar Novo Personagem</button>
-  </nav>
-</header>
+  <header id="topo">
+    <img src="img/Logo.png" alt="Diário de Aventura" class="logo-topo">
+  </header>
 
-<main>
-<section id="tela-lista" class="cartao" hidden>
-    <h2>Lista de Personagens</h2>
-    <p class="erro" id="aviso" role="alert"></p>
+  <main>
+    <section id="tela-lista" class="cartao" hidden>
+      <div class="cabecalho-lista">
+        <h2>Lista de Personagens</h2>
+        <p class="erro" id="aviso" role="alert"></p>
 
-    <div class="filtros-relacao" id="f-relacao" role="group" aria-label="Filtrar por relação">
-      <button type="button" class="filtro-chip ativo" data-relacao="" aria-pressed="true">Todos</button>
-      <button type="button" class="filtro-chip" data-relacao="Aliado" aria-pressed="false">Aliado</button>
-      <button type="button" class="filtro-chip" data-relacao="Inimigo" aria-pressed="false">Inimigo</button>
-      <button type="button" class="filtro-chip" data-relacao="Neutro" aria-pressed="false">Neutro</button>
-      <button type="button" class="filtro-chip" data-relacao="Duvidosa" aria-pressed="false">Duvidosa</button>
-    </div>
+        <div class="filtros-relacao" id="f-relacao" role="group" aria-label="Filtrar por relação">
+          <button type="button" class="filtro-chip ativo" data-relacao="" aria-pressed="true">Todos</button>
+          <button type="button" class="filtro-chip" data-relacao="Aliado" aria-pressed="false">Aliado</button>
+          <button type="button" class="filtro-chip" data-relacao="Inimigo" aria-pressed="false">Inimigo</button>
+          <button type="button" class="filtro-chip" data-relacao="Neutro" aria-pressed="false">Neutro</button>
+          <button type="button" class="filtro-chip" data-relacao="Duvidosa" aria-pressed="false">Duvidosa</button>
+        </div>
 
-    <div class="barra">
-      <input id="busca-personagem" type="search" placeholder="Pesquisar por nome ou descrição" aria-label="Pesquisar personagem">
-      <select id="f-classe" aria-label="Filtrar por classe">
-        <option value="">Classe: todas</option>
-      </select>
-      <select id="f-especie" aria-label="Filtrar por espécie">
-        <option value="">Espécie: todas</option>
-      </select>
-      <select id="f-status" aria-label="Filtrar por status">
-        <option value="">Status: todos</option>
-        <option>Vivo</option>
-        <option>Morto</option>
-      </select>
-      <select id="f-ordem" aria-label="Ordenar personagens">
-        <option value="nome-asc">Ordem: A–Z</option>
-        <option value="nome-desc">Ordem: Z–A</option>
-        <option value="recentes">Mais recentes</option>
-      </select>
-    </div>
+        <div class="barra">
+          <input id="busca-personagem" type="search" placeholder="Pesquisar personagem" aria-label="Pesquisar personagem">
+          <select id="f-classe" aria-label="Filtrar por classe">
+            <option value="">Classe: todas</option>
+          </select>
+          <select id="f-especie" aria-label="Filtrar por espécie">
+            <option value="">Espécie: todas</option>
+          </select>
+          <select id="f-status" aria-label="Filtrar por status">
+            <option value="">Status: todos</option>
+            <option>Vivo</option>
+            <option>Morto</option>
+          </select>
+          <select id="f-ordem" aria-label="Ordenar personagens">
+            <option value="nome-asc">Ordem: A–Z</option>
+            <option value="nome-desc">Ordem: Z–A</option>
+            <option value="recentes">Mais recentes</option>
+          </select>
+        </div>
 
-    <div class="filtros-rodape">
-      <span id="contador-lista" class="contador" aria-live="polite"></span>
-      <button type="button" id="btn-limpar-filtros" class="link limpar-filtros" hidden>Limpar filtros</button>
-    </div>
+        <div class="filtros-rodape">
+          <span id="contador-lista" class="contador" aria-live="polite"></span>
+          <button type="button" id="btn-limpar-filtros" class="link limpar-filtros" hidden>Limpar filtros</button>
+        </div>
+      </div>
 
-    <ul id="lista"></ul>
-  </section>
+      <ul id="lista"></ul>
 
-  <section id="tela-detalhe" class="cartao" hidden>
-    <div id="detalhe-conteudo"></div>
-  </section>
+      <div class="btn-add-wrap">
+        <button type="button" class="btn-add" data-acao="novo" aria-label="Criar Novo Personagem" title="Criar Novo Personagem">
+          <img src="img/btn_mais.png" alt="Novo Personagem">
+        </button>
+      </div>
+    </section>
 
-  <section id="tela-form" class="cartao" hidden>
-    <h2 id="titulo-form">Novo Personagem</h2>
-    <ol class="etapas" id="etapas"></ol>
-    <form id="form-personagem" novalidate>
-      <input type="hidden" name="id">
-      <fieldset class="etapa" data-etapa="0"><legend>Escolha a classe</legend><div class="cartoes" id="cartoes-classe"></div></fieldset>
-      <fieldset class="etapa" data-etapa="1"><legend>Escolha a raça</legend><div class="cartoes" id="cartoes-especie"></div></fieldset>
-      <fieldset class="etapa" data-etapa="2"><legend>Escolha o antecedente</legend><div class="cartoes" id="cartoes-antecedente"></div></fieldset>
-      <fieldset class="etapa" data-etapa="3">
-        <legend>Detalhes</legend>
-        <div class="grade">
-          <div>
-            <div class="foto" id="previa"><span>Sem foto</span></div>
-            <label for="foto">Foto</label>
-            <input id="foto" type="file" accept="image/*">
-          </div>
-          <div>
-            <label for="nome">Nome</label>
-            <input id="nome" name="nome" maxlength="60" required>
-            <label for="descricao">Descrição</label>
-            <textarea id="descricao" name="descricao" rows="4" maxlength="500"></textarea>
-            <div class="trio">
-              <div><label for="status">Status</label>
-                <select id="status" name="status"><option>Vivo</option><option>Morto</option></select></div>
-              <div><label for="idade">Idade</label><input id="idade" name="idade" type="number" min="0"></div>
-              <div><label for="relacao">Relação</label>
-                <select id="relacao" name="relacao"><option>Aliado</option><option>Inimigo</option><option>Neutro</option><option>Duvidosa</option></select></div>
+    <section id="tela-detalhe" class="cartao" hidden>
+      <div id="detalhe-conteudo"></div>
+    </section>
+
+    <section id="tela-form" class="cartao" hidden>
+      <h2 id="titulo-form">Novo Personagem</h2>
+      <ol class="etapas" id="etapas"></ol>
+      <form id="form-personagem" novalidate>
+        <input type="hidden" name="id">
+        <fieldset class="etapa" data-etapa="0">
+          <legend>Escolha a classe</legend>
+          <div class="cartoes" id="cartoes-classe"></div>
+        </fieldset>
+        <fieldset class="etapa" data-etapa="1">
+          <legend>Escolha a raça</legend>
+          <div class="cartoes" id="cartoes-especie"></div>
+        </fieldset>
+        <fieldset class="etapa" data-etapa="2">
+          <legend>Escolha o antecedente</legend>
+          <div class="cartoes" id="cartoes-antecedente"></div>
+        </fieldset>
+        <fieldset class="etapa" data-etapa="3">
+          <legend>Detalhes</legend>
+          <div class="grade">
+            <div>
+              <div class="foto" id="previa"><span>Sem foto</span></div>
+              <label for="foto">Foto</label>
+              <input id="foto" type="file" accept="image/*">
+            </div>
+            <div>
+              <label for="nome">Nome</label>
+              <input id="nome" name="nome" maxlength="60" required>
+              <label for="descricao">Descrição</label>
+              <textarea id="descricao" name="descricao" rows="4" maxlength="500"></textarea>
+              <div class="trio">
+                <div>
+                  <label for="status">Status</label>
+                  <select id="status" name="status">
+                    <option>Vivo</option>
+                    <option>Morto</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="idade">Idade</label>
+                  <input id="idade" name="idade" type="number" min="0">
+                </div>
+                <div>
+                  <label for="relacao">Relação</label>
+                  <select id="relacao" name="relacao">
+                    <option>Aliado</option>
+                    <option>Inimigo</option>
+                    <option>Neutro</option>
+                    <option>Duvidosa</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
+        </fieldset>
+        <p class="erro" id="erro-form" role="alert"></p>
+        <div class="acoes">
+          <button class="btn" type="button" data-acao="anterior">Cancelar</button>
+          <button class="btn" type="button" data-acao="proximo">Próximo</button>
+          <button class="icone-salvar" type="submit" id="btn-salvar" title="Salvar" aria-label="Salvar" hidden>
+            <img src="img/btn_salvar.png" alt="Salvar">
+          </button>
         </div>
-      </fieldset>
-      <p class="erro" id="erro-form" role="alert"></p>
-      <div class="acoes">
-        <button class="btn" type="button" data-acao="anterior">Cancelar</button>
-        <button class="btn" type="button" data-acao="proximo">Próximo</button>
-        <button class="btn" type="submit" id="btn-salvar" hidden>Salvar</button>
-      </div>
-    </form>
-  </section>
-</main>
+      </form>
+    </section>
+  </main>
 
-<!-- caixa de dialogo para confirmar antes de apagar -->
-<dialog id="caixa-confirmar" class="caixa-dialogo">
-  <h3>Confirmar exclusão</h3>
-  <p id="texto-confirmar"></p>
-  <div class="acoes">
-    <button class="btn" type="button" id="btn-nao">Cancelar</button>
-    <button class="btn" type="button" id="btn-sim">Excluir</button>
-  </div>
-</dialog>
+  <dialog id="caixa-confirmar" class="caixa-dialogo">
+    <h3>Confirmar exclusão</h3>
+    <p id="texto-confirmar"></p>
+    <div class="acoes">
+      <button class="btn" type="button" id="btn-nao">Cancelar</button>
+      <button class="btn" type="button" id="btn-sim">Excluir</button>
+    </div>
+  </dialog>
 
-<script src="js/storage.js"></script>
-<script src="js/dados.js"></script>
-<script src="js/filtros.js"></script>
-<script src="js/personagens.js"></script>
-<script src="js/ui.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/dados.js"></script>
+  <script src="js/filtros.js"></script>
+  <script src="js/personagens.js"></script>
+  <script src="js/ui.js"></script>
 </body>
 </html>
